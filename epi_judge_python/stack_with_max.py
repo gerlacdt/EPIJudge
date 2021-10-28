@@ -1,27 +1,30 @@
 from test_framework import generic_test
 from test_framework.test_failure import TestFailure
 
+from collections import namedtuple
+from typing import List
+
+Element = namedtuple("Element", ["value", "localMax"])
+
 
 class Stack:
     def __init__(self):
-        self._data = []
-        self._sorted_data = []
+        self._data: List[Element] = []
 
     def empty(self) -> bool:
         return True if not self._data else False
 
     def max(self) -> int:
-        return self._sorted_data[-1]
+        return self._data[-1].localMax
 
     def pop(self) -> int:
-        item = self._data.pop()
-        self._sorted_data.remove(item)
-        return item
+        return self._data.pop().value
 
     def push(self, x: int) -> None:
-        self._data.append(x)
-        self._sorted_data.append(x)
-        self._sorted_data.sort()
+        if not self._data:
+            self._data.append(Element(x, x))
+        else:
+            self._data.append(Element(x, max(x, self._data[-1].localMax)))
 
 
 def stack_tester(ops):
