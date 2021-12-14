@@ -11,7 +11,27 @@ def str_bst(node):
     return "{} ({} {})".format(node.data, rec_str(node.left), rec_str(node.right))
 
 
+def inorder(tree: BinaryTreeNode):
+
+    result = []
+
+    def helper(node):
+        if not node:
+            return
+        helper(node.left)
+        result.append(node.data)
+        helper(node.right)
+
+    helper(tree)
+    return result
+
+
 def is_binary_tree_bst(tree: BinaryTreeNode) -> bool:
+    nums = inorder(tree)
+    return nums == list(sorted(nums))
+
+
+def recurse(tree: BinaryTreeNode) -> bool:
     if not tree:
         return True
 
