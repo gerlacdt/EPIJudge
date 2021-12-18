@@ -11,8 +11,7 @@ def str_bst(node):
     return "{} ({} {})".format(node.data, rec_str(node.left), rec_str(node.right))
 
 
-def inorder(tree: BinaryTreeNode):
-
+def is_bst_inorder(tree: BinaryTreeNode):
     result = []
 
     def helper(node):
@@ -23,15 +22,30 @@ def inorder(tree: BinaryTreeNode):
         helper(node.right)
 
     helper(tree)
-    return result
+    return result == list(sorted(result))
+
+
+def is_bst_preorder(tree: BinaryTreeNode) -> bool:
+    def helper(node: BinaryTreeNode, node_min, node_max):
+        if not node:
+            return True
+        if node.data < node_min or node.data > node_max:
+            return False
+
+        return helper(node.left, node_min, node.data) and helper(
+            node.right, node.data, node_max
+        )
+
+    return helper(tree, float("-inf"), float("inf"))
 
 
 def is_binary_tree_bst(tree: BinaryTreeNode) -> bool:
-    nums = inorder(tree)
-    return nums == list(sorted(nums))
+    return is_bst_preorder(tree)
+    # return is_bst_inorder(tree)
+    # return is_bst_postorder(tree)
 
 
-def recurse(tree: BinaryTreeNode) -> bool:
+def is_bst_postorder(tree: BinaryTreeNode) -> bool:
     if not tree:
         return True
 
